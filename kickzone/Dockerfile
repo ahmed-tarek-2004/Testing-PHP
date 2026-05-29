@@ -50,7 +50,7 @@
 # ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 FROM php:8.3-apache
 
-# تنزيل المتطلبات الأساسية ومكتبات الصور
+# تنزيل المتطلبات الأساسية ومكتبات الصور (بأسماء متوافقة مع نظام Debian)
 RUN apt-get update && apt-get install -y \
     git \
     zip \
@@ -58,7 +58,7 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     libpng-dev \
     libjpeg-dev \
-    freetype-dev \
+    libfreetype6-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install zip pdo_mysql gd bcmath
 
