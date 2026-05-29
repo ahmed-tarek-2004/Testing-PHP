@@ -17,10 +17,14 @@ php artisan migrate --force || true
 echo "Generating Swagger Docs..."
 php artisan l5-swagger:generate || true
 
-# إعطاء الصلاحيات (مهم جداً تكون الخطوة دي هنا في الآخر)
+# 1️⃣ التعديل الأول: نشر ملفات الـ Assets الخاصة بواجهة Swagger
+echo "Publishing Swagger Assets..."
+php artisan l5-swagger:publish-assets --force || true
+
+# 2️⃣ التعديل الثاني: إعطاء الصلاحيات (تم إضافة مجلد public لضمان قراءة ملفات الـ Assets)
 echo "Setting permissions..."
-chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public
+chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public
 
 # تشغيل السيرفر
 php-fpm -D
