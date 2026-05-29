@@ -26,7 +26,7 @@ Route::prefix('v1')->group(function (): void {
         Route::post('forgot-password',  [AuthController::class, 'forgotPassword']);
         Route::post('reset-password',   [AuthController::class, 'resetPassword']);
         Route::post('googleCallback',  [AuthController::class, 'googleCallback']);
-     
+
 });
     // ── Protected routes (Sanctum auth) ───────────────────
     Route::middleware('auth:sanctum')->group(function (): void {
@@ -85,7 +85,7 @@ Route::prefix('v1')->group(function (): void {
         Route::get ('chats',                   [\App\Http\Controllers\API\V1\Chat\ChatController::class, 'index']);
         Route::get ('chats/{id}/messages',     [\App\Http\Controllers\API\V1\Chat\ChatController::class, 'messages']);
         Route::post('chats/{id}/messages',     [\App\Http\Controllers\API\V1\Chat\ChatController::class, 'send']);
-        
+
 
        Route::get('notifications', [NotificationController::class, 'index']);
        Route::patch('notifications/{id}/read', [NotificationController::class, 'markAsRead']);
@@ -98,6 +98,9 @@ Route::get('/v1/test', function () {
     ]);
 });
 
-
+Route::get('/run-migrations', function () {
+       \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+       return 'Migrations applied successfully!';
+   });
 
 // ============================================================
