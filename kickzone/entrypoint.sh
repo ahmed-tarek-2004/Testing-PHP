@@ -1,24 +1,27 @@
 #!/bin/bash
 
-# Create necessary Nginx directories for Alpine
+# إنشاء المجلد المطلوب للـ Nginx
 mkdir -p /run/nginx
 
-# Ensure correct permissions for storage and cache directories
-chmod -R 775 storage bootstrap/cache
-chown -R www-data:www-data storage bootstrap/cache
+# مسح الكاشات عشان لارافل تقرأ التعديلات الجديدة بشكل سليم
+echo "Clearing caches..."
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
 
-# Run Laravel artisan commands
-echo "Caching configuration and routes..."
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-
+# تشغيل قواعد البيانات
 echo "Running migrations..."
-# تم إضافة || true لمنع الكونتينر من الإغلاق إذا فشل الاتصال بقاعدة البيانات
 php artisan migrate --force || true
 
-# Start PHP-FPM in the background
-php-fpm -D
+# توليد ملفات توثيق Swagger أوتوماتيكياً
+echo "Generating Swagger Docs..."
+php artisan l5-swagger:generate || true
 
-# Start Nginx in the foreground
+# إعطاء الصلاحيات (مهم جداً تكون الخطوة دي هنا في الآخر)
+echo "Setting permissions..."
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+
+# تشغيل السيرفر
+php-fpm -D
 nginx -g "daemon off;"
