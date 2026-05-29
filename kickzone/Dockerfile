@@ -40,6 +40,9 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 COPY nginx.conf /etc/nginx/http.d/default.conf
 
 COPY entrypoint.sh /usr/local/bin/
+
+# Fix Windows line endings (CRLF to LF) - مهم جداً
+RUN sed -i 's/\r$//' /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 10000
