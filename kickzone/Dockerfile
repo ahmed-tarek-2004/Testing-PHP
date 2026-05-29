@@ -50,7 +50,7 @@
 # ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 FROM php:8.3-apache
 
-# تنزيل المتطلبات الأساسية ومكتبات الصور (بأسماء متوافقة مع نظام Debian)
+# تنزيل المتطلبات الأساسية ومكتبات الصور
 RUN apt-get update && apt-get install -y \
     git \
     zip \
@@ -60,7 +60,7 @@ RUN apt-get update && apt-get install -y \
     libjpeg-dev \
     libfreetype6-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install zip pdo_mysql gd bcmath
+    && docker-php-ext-install zip pdo_mysql gd bcmath exif
 
 # تفعيل Apache mod_rewrite عشان الـ Routes تشتغل
 RUN a2enmod rewrite
@@ -82,7 +82,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # تنزيل مكتبات Laravel بدون ملفات التطوير
 RUN composer install --optimize-autoloader --no-dev
 
-# تجهيز ملف التشغيل التلقائي (Entrypoint) ومعالجة مشكلة الويندوز
+# تجهيز ملف التشغيل التلقائي (Entrypoint)
 COPY entrypoint.sh /usr/local/bin/
 RUN sed -i 's/\r$//' /usr/local/bin/entrypoint.sh \
     && chmod +x /usr/local/bin/entrypoint.sh
