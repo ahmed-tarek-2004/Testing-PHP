@@ -31,26 +31,36 @@
 # nginx -g "daemon off;"
 #!/bin/bash
 
+
+##2
 # مسح الكاشات
-echo "Clearing caches..."
-php artisan config:clear
-php artisan route:clear
-php artisan view:clear
+# echo "Clearing caches..."
+# php artisan config:clear
+# php artisan route:clear
+# php artisan view:clear
 
-# تشغيل المايجريشن أوتوماتيكياً
-echo "Running migrations..."
-php artisan migrate --force || true
+# # تشغيل المايجريشن أوتوماتيكياً
+# echo "Running migrations..."
+# php artisan migrate --force || true
 
-# توليد ونشر توثيق Swagger
-echo "Generating Swagger Docs..."
-php artisan l5-swagger:generate || true
-php artisan l5-swagger:publish-assets --force || true
+# # توليد ونشر توثيق Swagger
+# echo "Generating Swagger Docs..."
+# php artisan l5-swagger:generate || true
+# php artisan l5-swagger:publish-assets --force || true
 
-# إعطاء الصلاحيات النهائية عشان مفيش حاجة تضرب
-echo "Setting permissions..."
+# # إعطاء الصلاحيات النهائية عشان مفيش حاجة تضرب
+# echo "Setting permissions..."
+# chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public
+# chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public
+
+# # تشغيل سيرفر أباتشي
+# echo "Starting Apache Server..."
+# exec "$@"
+#!/bin/bash
+
+# إعطاء الصلاحيات بسرعة
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public
 chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public
 
-# تشغيل سيرفر أباتشي
-echo "Starting Apache Server..."
+# تشغيل سيرفر أباتشي فوراً عشان نعدي الـ Health Check
 exec "$@"

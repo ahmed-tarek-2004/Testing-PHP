@@ -90,6 +90,7 @@ RUN sed -i 's/\r$//' /usr/local/bin/entrypoint.sh \
 # إعطاء الصلاحيات المبدئية
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
+EXPOSE 10000
 # تحديد مسار التشغيل الافتراضي
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["apache2-foreground"]
